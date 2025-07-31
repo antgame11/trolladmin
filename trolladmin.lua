@@ -1,4 +1,4 @@
-local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/DCHARLESAKAMRGREEN/Severe-Luas/refs/heads/main/Internal%20Helper.lua"))()
+local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/helper.lua"))()
 local walkspeedran = false
 local commands = {}
 function PlayerID(playername)
@@ -67,11 +67,12 @@ end,"Brings yourself to another player","<plr>")
 addCommand({"ws","walkspeed"}, function(speed)
 	local localplayer = getlocalplayer()
 	local Humanoid = getHumanoid(localplayer)
-	if walkspeedran == false then
-		bob.setwalkspeedcheck(Humanoid,9999)
-		walkspeedran = true
+	local speednum = tonumber(speed)
+	if speednum > 1 and speednum < 10000 then
+		bob.setwalkspeedcheck(Humanoid,speednum)
+		bob.setwalkspeed(Humanoid,speednum)
 	end
-	bob.setwalkspeed(Humanoid,tonumber(speed))
+
 end,"Sets your walkspeed","<speed>")
 
 addCommand({"jp","jumppower"}, function(jump)
@@ -92,12 +93,9 @@ addCommand({"fling"}, function(plrname)
 	local hrp = getRootPart(localplayer)
 	local prefling = getposition(hrp)
 	local otherhrp = getRootPart(otherplayer)
-	local otherposition = 
-
-	print('ok')
-	for b = 1, 10, 1 do
+	for b = 1, 16, 1 do
 		setposition(hrp,getposition(otherhrp))
-		setvelocity(hrp,{100000, 100000, 100000})
+		setvelocity(hrp,{100000, 1000000, 1000000})
 		setposition(hrp,getposition(otherhrp))
 		rwait(0.001)
 	end
@@ -107,6 +105,12 @@ addCommand({"fling"}, function(plrname)
 		setvelocity(hrp,{0, 0, 0})
 	end
 end,"flings a player i guess","<player>")
+
+addCommand({"sit"}, function()
+	local localplayer = getlocalplayer()
+	local Humanoid = getHumanoid(localplayer)
+	bob.setsit(Humanoid,"True")
+end,"makes you sit","")
 
 
 
