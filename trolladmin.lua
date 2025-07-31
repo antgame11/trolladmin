@@ -27,7 +27,9 @@ local function addCommand(aliases, exec, description, parameters)
 		}
 end
 
-
+local function rwait(time)
+	waitforchild(Workspace, "dhjkashgdjkashdjas", time)
+end
 
 local function callCommand(cmdName, ...)
 	print(cmdName)
@@ -55,6 +57,7 @@ local function getHumanoid(player)
 end
 
 addCommand({"to","goto","tp"}, function(plrname)
+	rwait(1)
 	print(plrname)
 	local otherplayer = PlayerID(plrname)[1]
 	local otherposition = getposition(getRootPart(otherplayer))
@@ -82,7 +85,30 @@ addCommand({"hipheight","hh"}, function(hipheight)
 	local Humanoid = getHumanoid(localplayer)
 	bob.sethipheight(Humanoid,tonumber(hipheight))
 end,"Sets your hipheight","<hipheight>")
---untested
+
+addCommand({"fling"}, function(plrname)
+	local otherplayer = PlayerID(plrname)[1]
+	local localplayer = getlocalplayer()
+	local hrp = getRootPart(localplayer)
+	local prefling = getposition(hrp)
+	local otherhrp = getRootPart(otherplayer)
+	local otherposition = 
+
+	print('ok')
+	for b = 1, 10, 1 do
+		setposition(hrp,getposition(otherhrp))
+		setvelocity(hrp,{100000, 100000, 100000})
+		setposition(hrp,getposition(otherhrp))
+		rwait(0.001)
+	end
+	rwait(1)
+	for b = 1, 10, 1 do
+		setposition(hrp,prefling)
+		setvelocity(hrp,{0, 0, 0})
+	end
+end,"flings a player i guess","<player>")
+
+
 
 local ws = websocket_connect("ws://localhost:8765")
 websocket_onmessage(ws, function(message)
@@ -90,3 +116,4 @@ websocket_onmessage(ws, function(message)
 	print("Running".. message)
     callCommand(unpack(command))
 end)
+

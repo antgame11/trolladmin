@@ -20,7 +20,6 @@ async def send_console_input():
     while True:
         message = await loop.run_in_executor(None, input, "$ ")
         if connected_clients:
-            
             await asyncio.gather(*(client.send(message) for client in connected_clients))
 
 async def main():
