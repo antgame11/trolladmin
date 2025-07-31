@@ -71,12 +71,18 @@ addCommand({"ws","walkspeed"}, function(speed)
 	bob.setwalkspeed(Humanoid,tonumber(speed))
 end,"Sets your walkspeed","<speed>")
 
-
-addCommand({"wscheck","walkspeedcheck","wsc"}, function(speed)
+addCommand({"jp","jumppower"}, function(jump)
 	local localplayer = getlocalplayer()
 	local Humanoid = getHumanoid(localplayer)
-	bob.setwalkspeedcheck(Humanoid,tonumber(speed))
-end,"Sets your walkspeed check","<speed>")
+	bob.setjumppower(Humanoid,tonumber(jump))
+end,"Sets your jumppower","<speed>")
+
+addCommand({"hipheight","hh"}, function(hipheight)
+	local localplayer = getlocalplayer()
+	local Humanoid = getHumanoid(localplayer)
+	bob.sethipheight(Humanoid,tonumber(hipheight))
+end,"Sets your hipheight","<hipheight>")
+--untested
 
 local ws = websocket_connect("ws://localhost:8765")
 websocket_onmessage(ws, function(message)

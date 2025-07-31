@@ -1,3 +1,5 @@
+# gpted xd
+
 import asyncio
 import websockets
 import time
