@@ -1,45 +1,46 @@
 local Players = findservice(Game, "Players")
 local LocalPlayer = getlocalplayer()
+local CONTACT_FORCE = 1700
+local FLING_DURATION = 6
+
 local isFlinging = false
 
-local function getcharacter(player)
-    return getcharacter(player)
-end
-
-local function getrootpart(character)
-    return findfirstchild(character, "HumanoidRootPart")
+local function getRootPart(player)
+    local char = getcharacter(player)
+    if not char then return nil end
+    return findfirstchild(char, "HumanoidRootPart")
 end
 
 local function safeGetPosition(part)
     local pos = {getposition(part)}
-    local x = pos[1] or pos.x or pos.X
-    local y = pos[2] or pos.y or pos.Y
-    local z = pos[3] or pos.z or pos.Z
-    return x, y, z
+    if type(pos[1]) == "table" then
+        return pos[1].x or pos[1].X, pos[1].y or pos[1].Y, pos[1].z or pos[1].Z
+    else
+        return pos[1], pos[2], pos[3]
+    end
 end
 
-local function fling(player,CONTACT_FORCE,FLING_DURATION)
+local function fling(player)
     if isFlinging then return false end
 
-    local targetChar = getcharacter(player)
-    local localChar = getcharacter(LocalPlayer)
-    if not targetChar or not localChar then return false end
+    local targetRoot = getRootPart(player)
+    local localRoot = getRootPart(LocalPlayer)
 
-    local targetRoot = getrootpart(targetChar)
-    local localRoot = getrootpart(localChar)
     if not targetRoot or not localRoot then return false end
 
     isFlinging = true
     spawn(function()
-        local startTime = tick()
-        while tick() - startTime < FLING_DURATION and isFlinging do
+        local start = tick()
+        while tick() - start < FLING_DURATION and isFlinging do
             local x, y, z = safeGetPosition(targetRoot)
-            setposition(localRoot, {x, y, z})
-            setvelocity(localRoot, {
-                math.random(-CONTACT_FORCE, CONTACT_FORCE),
-                math.random(0, CONTACT_FORCE),
-                math.random(-CONTACT_FORCE, CONTACT_FORCE)
-            })
+            if x and y and z then
+                setposition(localRoot, {x, y, z})
+                setvelocity(localRoot, {
+                    math.random(-CONTACT_FORCE, CONTACT_FORCE),
+                    math.random(0, CONTACT_FORCE),
+                    math.random(-CONTACT_FORCE, CONTACT_FORCE)
+                })
+            end
             wait()
         end
         isFlinging = false

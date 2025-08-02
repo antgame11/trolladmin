@@ -1,4 +1,6 @@
 local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/helper.lua"))()
+local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/fling.lua"))
+
 local walkspeedran = false
 local commands = {}
 function PlayerID(playername)
@@ -114,22 +116,7 @@ end,"Sets your hipheight","<hipheight>")
 
 addCommand({"fling"}, function(plrname)
 	local otherplayer = PlayerID(plrname)[1]
-	local localplayer = getlocalplayer()
-	local hrp = getRootPart(localplayer)
-	local prefling = getposition(hrp)
-	local otherhrp = getRootPart(otherplayer)
-	SET_MEMORY_WRITE_STRENGTH(0.00001)
-	for b = 1, 300, 1 do
-		setposition(hrp,getposition(otherhrp))
-		setvelocity(hrp,{1000, 0, 1000})
-		setposition(hrp,getposition(otherhrp))
-		rwait(0.0001)
-	end
-	rwait(1)
-	for b = 1, 10, 1 do
-		setposition(hrp,prefling)
-		setvelocity(hrp,{0, 0, 0})
-	end
+	fling(otherplayer)
 end,"flings a player i guess","<player>")
 
 addCommand({"sit"}, function()
