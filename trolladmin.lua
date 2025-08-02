@@ -56,13 +56,36 @@ local function getHumanoid(player)
 	return findfirstchild(character, "Humanoid")
 end
 
+local function getCamera()
+	return findfirstchild(Workspace,"Camera")
+end
+
 addCommand({"to","goto","tp"}, function(plrname)
-	rwait(1)
-	print(plrname)
 	local otherplayer = PlayerID(plrname)[1]
 	local otherposition = getposition(getRootPart(otherplayer))
 	setposition(getRootPart(getlocalplayer()), otherposition)
 end,"Brings yourself to another player","<plr>")
+
+addCommand({"loopto","loopgoto"}, function(plrname)
+	pcall(function ()
+		thread.terminate("loopgoto")
+	end)
+	rwait(0.3)
+	thread.create("loopgoto",function ()
+		while true do
+			local otherplayer = PlayerID(plrname)[1]
+			local otherposition = getposition(getRootPart(otherplayer))
+			setposition(getRootPart(getlocalplayer()), otherposition)
+			rwait(0.0001)
+		end
+	end)
+end,"loop goes to a player","<plr>")
+
+addCommand({"unloopto","unloopgoto"}, function()
+	pcall(function ()
+		thread.terminate("loopgoto")
+	end)
+end,"loop goes to a player","<plr>")
 
 addCommand({"ws","walkspeed"}, function(speed)
 	local localplayer = getlocalplayer()
@@ -70,7 +93,9 @@ addCommand({"ws","walkspeed"}, function(speed)
 	local speednum = tonumber(speed)
 	if speednum > 1 and speednum < 10000 then
 		bob.setwalkspeedcheck(Humanoid,speednum)
-		bob.setwalkspeed(Humanoid,speednum)
+		if tonumber(bob.getwalkspeedcheck(Humanoid)) == speednum then
+			bob.setwalkspeed(Humanoid,speednum)
+		end
 	end
 
 end,"Sets your walkspeed","<speed>")
@@ -93,11 +118,12 @@ addCommand({"fling"}, function(plrname)
 	local hrp = getRootPart(localplayer)
 	local prefling = getposition(hrp)
 	local otherhrp = getRootPart(otherplayer)
-	for b = 1, 16, 1 do
+	SET_MEMORY_WRITE_STRENGTH(0.00001)
+	for b = 1, 300, 1 do
 		setposition(hrp,getposition(otherhrp))
-		setvelocity(hrp,{100000, 1000000, 1000000})
+		setvelocity(hrp,{1000, 0, 1000})
 		setposition(hrp,getposition(otherhrp))
-		rwait(0.001)
+		rwait(0.0001)
 	end
 	rwait(1)
 	for b = 1, 10, 1 do
@@ -112,12 +138,80 @@ addCommand({"sit"}, function()
 	bob.setsit(Humanoid,"True")
 end,"makes you sit","")
 
+addCommand({"infjump"}, function()
+	pcall(function ()
+		thread.terminate("infjump")
+	end)
+	rwait(0.3)
+	thread.create("infjump",function ()
+	while true do
+		SET_MEMORY_WRITE_STRENGTH(0.00001)
+		local localplayer = getlocalplayer()
+		local character = getcharacter(localplayer)
+		local primarypart = findfirstchild(character, "HumanoidRootPart")
+
+		if character and primarypart then
+			local velocity = getvelocity(primarypart)
+			local keys = getpressedkeys()
+			
+			if table.find(keys, "Space") and not pressed and velocity ~= {velocity.x, 0, velocity.z} then
+				setvelocity(primarypart, {velocity.x, 50, velocity.z})
+				pressed = true
+			elseif not table.find(keys, "Space") then
+				pressed = false
+			end
+		end
+		
+		rwait(0.000001)
+	end
+	end)
+end,"makes you jump infinitely","")
+
+addCommand({"setfov", "fov"}, function(fovinput)
+	local fov = tonumber(fovinput)
+	local camera = getCamera()
+	bob.setfov(camera,fov)
+end,"makes you jump infinitely","")
+
+
+addCommand({"stopinfjump","noinfjump"}, function()
+	thread.terminate("infjump")
+end,"makes you jump infinitely","")
+
+addCommand({"infjump"}, function()
+	pcall(function ()
+		thread.terminate("infjump")
+	end)
+	rwait(0.3)
+	thread.create("infjump",function ()
+	while true do
+		local localplayer = getlocalplayer()
+		local character = getcharacter(localplayer)
+		local primarypart = findfirstchild(character, "HumanoidRootPart")
+
+		if character and primarypart then
+			local velocity = getvelocity(primarypart)
+			local keys = getpressedkeys()
+			
+			if table.find(keys, "Space") and not pressed and velocity ~= {velocity.x, 0, velocity.z} then
+				setvelocity(primarypart, {velocity.x, 50, velocity.z})
+				pressed = true
+			elseif not table.find(keys, "Space") then
+				pressed = false
+			end
+		end
+		
+		rwait(0.000001)
+	end
+	end)
+end,"makes you jump infinitely","")
 
 
 local ws = websocket_connect("ws://localhost:8765")
+
 websocket_onmessage(ws, function(message)
 	local command = string.split(message," ")
-	print("Running".. message)
+	print("Running ".. message)
     callCommand(unpack(command))
 end)
 
