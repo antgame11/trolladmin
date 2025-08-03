@@ -1,5 +1,6 @@
 local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/helper.lua"))()
-local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/fling.lua"))
+local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/fling.lua"))()
+
 
 local walkspeedran = false
 local commands = {}
