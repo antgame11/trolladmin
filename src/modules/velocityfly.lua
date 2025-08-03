@@ -30,7 +30,8 @@ return function(movespeed)
     end
 
     while true do
-        local player = getlocalplayer()
+        pcall(function (...)
+             local player = getlocalplayer()
         local hrp = getRootPart(player)
 
         local cam = getCamera()
@@ -55,5 +56,7 @@ return function(movespeed)
         end
         local moveVel = multiplyVector(moveDir, movespeed * 100)
         setvelocity(hrp, moveVel)
+        end)
+       
     end
 end
