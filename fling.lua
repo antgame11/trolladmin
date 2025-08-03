@@ -1,4 +1,6 @@
-return function(player)
+local f = {}
+
+f.fling = function (player)
     local Players = findservice(Game, "Players")
     local LocalPlayer = getlocalplayer()
     local CONTACT_FORCE = 1700
@@ -47,3 +49,6 @@ return function(player)
 
     return true
 end
+
+
+return f
