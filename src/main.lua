@@ -1,6 +1,7 @@
 local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/helper.lua"))()
 local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/fling.lua"))()
 
+SET_MEMORY_READ_STRENGTH(0.00001)
 
 local walkspeedran = false
 local commands = {}
@@ -17,10 +18,15 @@ function PlayerID(playername)
     end
 	--let's try with display names :D
     for _, v in pairs(players) do
-        local name = bob.getdisplayname(v):lower()
-        if name:find(PlayerName, 1, true) then
-            return {v}
-        end
+		pcall(function ()
+			local name = bob.getdisplayname(v)
+			if name ~= nil then
+				local name = bob.getdisplayname(v):lower()
+				if name:find(PlayerName, 1, true) then
+					return {v}
+				end
+			end
+		end)
     end
 
     return {}
@@ -125,8 +131,17 @@ addCommand({"hipheight","hh"}, function(hipheight)
 end,"Sets your hipheight","<hipheight>")
 
 addCommand({"fling"}, function(plrname)
+	local localplayer = getlocalplayer()
 	local otherplayer = PlayerID(plrname)[1]
+	local hrp = getRootPart(localplayer)
+	local prepos = getposition(hrp)
 	fling(otherplayer)
+	rwait(6)
+	bob.setanchored(hrp,true)
+	setposition(hrp,prepos)
+	rwait(3)
+	bob.setanchored(hrp,false)
+	setposition(hrp,prepos)
 end,"flings a player i guess","<player>")
 
 addCommand({"sit"}, function()
