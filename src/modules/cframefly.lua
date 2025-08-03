@@ -1,8 +1,11 @@
-return function ()
+return function (movespeed)
+    if movespeed == nil then
+        movespeed = 1
+    end
     local function getRootPart(player)
-    local character = getcharacter(player)
-    return findfirstchild(character, "HumanoidRootPart")
-end
+        local character = getcharacter(player)
+        return findfirstchild(character, "HumanoidRootPart")
+    end
 
 local function getCamera()
     return findfirstchild(Workspace, "Camera")
@@ -51,7 +54,7 @@ while true do
         moveDir = addVector(moveDir, {x = right.x, y = look.y, z = right.z})
     end
 
-        local moveStep = multiplyVector(moveDir, 0.03)
+        local moveStep = multiplyVector(moveDir, 0.03 * movespeed)
         currentPos = addVector(currentPos, moveStep)
         setvelocity(hrp, {x = 0, y = 0, z = 0})
         setposition(hrp, currentPos)
