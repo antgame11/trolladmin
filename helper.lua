@@ -16,22 +16,16 @@ Helper.Primitive = {
     end
 }
 
--- <Part>
-Helper.getanchored = function(Part)
-    local Primitive = Helper.Primitive.Get(Part)
-    return getmemoryvalue(Primitive, Offsets.AnchoredCheck, "bool")
+Helper.getdisplayname = function (Player)
+    return getmemoryvalue(Player, Offsets.DisplayName, "string")
 end
 
-Helper.setanchored = function(Part, Value)
-    local Primitive = Helper.Primitive.Get(Part)
-    setmemoryvalue(Primitive, Offsets.AnchoredCheck, "bool", Value)
+Helper.getgravity = function (workspace)
+    return getmemoryvalue(workspace, Offsets.Gravity, "double")
 end
 
-Helper.setpartsize = function(Part, Size)
-    local Primitive = Helper.Primitive.Get(Part)
-    setmemoryvalue(Primitive, Offsets.PartSize, "float", Size.X)
-    setmemoryvalue(Primitive, Offsets.PartSize + 0x4, "float", Size.Y)
-    setmemoryvalue(Primitive, Offsets.PartSize + 0x8, "float", Size.Z)
+Helper.setgravity = function (workspace, value)
+    return setmemoryvalue(workspace, Offsets.Gravity, "double", value)
 end
 
 -- <Material>

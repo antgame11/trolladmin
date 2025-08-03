@@ -14,6 +14,13 @@ function PlayerID(playername)
             return {v}
         end
     end
+	--let's try with display names :D
+    for _, v in pairs(players) do
+        local name = Helper.getdisplayname(v):lower()
+        if name:find(PlayerName, 1, true) then
+            return {v}
+        end
+    end
 
     return {}
 end
@@ -75,10 +82,12 @@ addCommand({"loopto","loopgoto"}, function(plrname)
 	rwait(0.3)
 	thread.create("loopgoto",function ()
 		while true do
-			local otherplayer = PlayerID(plrname)[1]
-			local otherposition = getposition(getRootPart(otherplayer))
-			setposition(getRootPart(getlocalplayer()), otherposition)
-			rwait(0.0001)
+			pcall(function ()
+				local otherplayer = PlayerID(plrname)[1]
+				local otherposition = getposition(getRootPart(otherplayer))
+				setposition(getRootPart(getlocalplayer()), otherposition)
+				rwait(0.0001)
+			end)
 		end
 	end)
 end,"loop goes to a player","<plr>")
@@ -158,7 +167,7 @@ addCommand({"setfov", "fov"}, function(fovinput)
 	local fov = tonumber(fovinput)
 	local camera = getCamera()
 	bob.setfov(camera,fov)
-end,"makes you jump infinitely","")
+end,"sets your fov","")
 
 
 addCommand({"stopinfjump","noinfjump"}, function()
@@ -199,6 +208,8 @@ local ws = websocket_connect("ws://localhost:8765")
 websocket_onmessage(ws, function(message)
 	local command = string.split(message," ")
 	print("Running ".. message)
-    callCommand(unpack(command))
+	pcall(function ()
+		callCommand(unpack(command))
+	end)
 end)
 
