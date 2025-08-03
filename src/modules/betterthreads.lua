@@ -1,14 +1,14 @@
 local thread = {}
 local running = {}
 
-function thread.start(name, func)
+function thread.create(name, func)
     thread.stop(name)
     local co = coroutine.create(func)
     running[name] = co
     coroutine.resume(co)
 end
 
-function thread.stop(name)
+function thread.terminate(name)
     local co = running[name]
     if co and coroutine.status(co) ~= "dead" then
         running[name] = nil
