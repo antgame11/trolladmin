@@ -19,6 +19,10 @@ return function (movespeed)
         return {x = vector.x * scalar, y = vector.y * scalar, z = vector.z * scalar}
     end
 
+    local function rwait(time)
+	waitforchild(Workspace, "terrible workaround but it works i guess", time)
+end
+
     local function addVector(...)
         local args = {...}
         local newvector = {x = 0, y = 0, z = 0}
@@ -63,6 +67,7 @@ return function (movespeed)
             local moveVel = multiplyVector(moveDir, movespeed * 100)
             setvelocity(hrp, moveVel)
         end
+        rwait(0.005)
     end
 end
 

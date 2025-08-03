@@ -15,6 +15,11 @@ local function multiplyVector(vector, scalar)
     return {x = vector.x * scalar, y = vector.y * scalar, z = vector.z * scalar}
 end
 
+
+local function rwait(time)
+	waitforchild(Workspace, "terrible workaround but it works i guess", time)
+end
+
 local function addVector(...)
     local args = {...}
     local newvector = {x = 0, y = 0, z = 0}
@@ -57,7 +62,8 @@ while true do
         local moveStep = multiplyVector(moveDir, 0.03 * movespeed)
         currentPos = addVector(currentPos, moveStep)
         setvelocity(hrp, {x = 0, y = 0, z = 0})
-        setposition(hrp, currentPos)
+    setposition(hrp, currentPos)
+    rwait(0.005)
 end
 
 end
