@@ -1,7 +1,10 @@
-local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/helper.lua"))()
-local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/fling.lua"))()
+local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/helper.lua"))()
+local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/fling.lua"))()
+local velocityfly = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/velocityfly.lua"))()
+local velocityspeed = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/velocityspeed.lua"))()
 
 SET_MEMORY_READ_STRENGTH(0.00001)
+SET_MEMORY_WRITE_STRENGTH(0.00001)
 
 local walkspeedran = false
 local commands = {}
@@ -43,8 +46,9 @@ local function addCommand(aliases, exec, description, parameters)
 		}
 end
 
+-- when not focused on the roblox client, waits just don't work for whatever reason lol, this is a workaround until the devs fix wait
 local function rwait(time)
-	waitforchild(Workspace, "dhjkashgdjkashdjas", time)
+	waitforchild(Workspace, "terrible workaround but it works i guess", time)
 end
 
 local function callCommand(cmdName, ...)
@@ -111,8 +115,13 @@ addCommand({"ws","walkspeed"}, function(speed)
 	local speednum = tonumber(speed)
 	if speednum > 1 and speednum < 10000 then
 		bob.setwalkspeedcheck(Humanoid,speednum)
+		-- double checks just in case it doesn't work which kicks you and i don't want that, probably can fix by changing memory strength but not sure
 		if tonumber(bob.getwalkspeedcheck(Humanoid)) == speednum then
-			bob.setwalkspeed(Humanoid,speednum)
+			rwait(0.1)
+			bob.setwalkspeedcheck(Humanoid,speednum)
+			if tonumber(bob.getwalkspeedcheck(Humanoid)) == speednum then
+				bob.setwalkspeed(Humanoid,speednum)
+			end
 		end
 	end
 
@@ -136,12 +145,6 @@ addCommand({"fling"}, function(plrname)
 	local hrp = getRootPart(localplayer)
 	local prepos = getposition(hrp)
 	fling(otherplayer)
-	rwait(6)
-	bob.setanchored(hrp,true)
-	setposition(hrp,prepos)
-	rwait(3)
-	bob.setanchored(hrp,false)
-	setposition(hrp,prepos)
 end,"flings a player i guess","<player>")
 
 addCommand({"sit"}, function()
@@ -157,7 +160,6 @@ addCommand({"infjump"}, function()
 	rwait(0.3)
 	thread.create("infjump",function ()
 	while true do
-		SET_MEMORY_WRITE_STRENGTH(0.00001)
 		local localplayer = getlocalplayer()
 		local character = getcharacter(localplayer)
 		local primarypart = findfirstchild(character, "HumanoidRootPart")

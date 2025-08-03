@@ -2,7 +2,9 @@ return function (movespeed)
     if movespeed == nil then
         movespeed = 1
     end
+    SET_MEMORY_READ_STRENGTH(0.00001)
     SET_MEMORY_WRITE_STRENGTH(0.00001)
+
 
     local function getRootPart(player)
         local character = getcharacter(player)
