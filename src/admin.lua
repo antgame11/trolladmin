@@ -3,6 +3,7 @@ local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame
 local velocityfly = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/velocityfly.lua"))()
 local velocityspeed = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/velocityspeed.lua"))()
 local cframefly = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/cframefly.lua"))()
+local thread = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/betterthreads.lua"))()
 
 SET_MEMORY_READ_STRENGTH(0.00001)
 SET_MEMORY_WRITE_STRENGTH(0.00001)
@@ -35,6 +36,7 @@ function PlayerID(playername)
 
     return {}
 end
+
 
 local function addCommand(aliases, exec, description, parameters)
 	local primary = aliases[1]
