@@ -238,7 +238,7 @@ addCommand({"uncfly"}, function()
 	end)
 end,"removes your cframe fly","")
 
-addCommand({"uncfly"}, function()
+addCommand({"unfly"}, function()
 	pcall(function ()
 		thread.terminate("cframefly")
 	end)
