@@ -1,5 +1,9 @@
+-- TODO: use different offset provider
 local Data = JSONDecode(httpget("https://offsets.ntgetwritewatch.workers.dev/offsets.json"))
+
+
 local Offsets = {}
+
 for k,v in pairs(Data) do
     if string.sub(v,1,2) == "0x" then
         Offsets[k] = v
@@ -18,6 +22,57 @@ Helper.Primitive = {
 
 Helper.getdisplayname = function (Player)
     return getmemoryvalue(Player, Offsets.DisplayName, "string")
+end
+
+-- https://x64.gg/t/roblox-external-offsets-version-2a06298afe3947ab-now-with-primativeflags/1043
+
+--Hardcoded offsets :(
+local PrimitiveOffset = 0x178
+local PrimitiveFlagsOffset = 0x309
+local CanCollideFlag = 0x8
+local AnchoredFlag = 0x2
+
+
+-- TODO: make primitive flags function
+
+Helper.getcancollide = function (part)
+    local primitive_ptr = getmemoryvalue(part, PrimitiveOffset, "qword")
+    local primitive_userdata = pointer_to_user_data(primitive_ptr)
+    local flags = getmemoryvalue(primitive_userdata, PrimitiveFlagsOffset, "dword")
+    return bit32.band(flags, CanCollideFlag) ~= 0
+end
+
+Helper.setcancollide = function (part, enabled)
+    local primitive_ptr = getmemoryvalue(part, PrimitiveOffset, "qword")
+    local primitive_userdata = pointer_to_user_data(primitive_ptr)
+    local flags = getmemoryvalue(primitive_userdata, PrimitiveFlagsOffset, "dword")
+    if enabled then
+        flags = bit32.bor(flags, CanCollideFlag)
+    else
+        flags = bit32.band(flags, bit32.bnot(CanCollideFlag))
+    end
+
+    setmemoryvalue(primitive_userdata, PrimitiveFlagsOffset, "dword", flags)
+end
+
+Helper.getanchored = function (part)
+    local primitive_ptr = getmemoryvalue(part, PrimitiveOffset, "qword")
+    local primitive_userdata = pointer_to_user_data(primitive_ptr)
+    local flags = getmemoryvalue(primitive_userdata, PrimitiveFlagsOffset, "dword")
+    return bit32.band(flags, AnchoredFlag) ~= 0
+end
+
+Helper.setanchored = function (part, enabled)
+    local primitive_ptr = getmemoryvalue(part, PrimitiveOffset, "qword")
+    local primitive_userdata = pointer_to_user_data(primitive_ptr)
+    local flags = getmemoryvalue(primitive_userdata, PrimitiveFlagsOffset, "dword")
+    if enabled then
+        flags = bit32.bor(flags, AnchoredFlag)
+    else
+        flags = bit32.band(flags, bit32.bnot(AnchoredFlag))
+    end
+
+    setmemoryvalue(primitive_userdata, PrimitiveFlagsOffset, "dword", flags)
 end
 
 Helper.getgravity = function (workspace)

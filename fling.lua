@@ -1,26 +1,25 @@
-local Players = findservice(Game, "Players")
-local LocalPlayer = getlocalplayer()
-local CONTACT_FORCE = 1700
-local FLING_DURATION = 6
+return function(player)
+    local Players = findservice(Game, "Players")
+    local LocalPlayer = getlocalplayer()
+    local CONTACT_FORCE = 1700
+    local FLING_DURATION = 6
+    local isFlinging = false
 
-local isFlinging = false
-
-local function getRootPart(player)
-    local char = getcharacter(player)
-    if not char then return nil end
-    return findfirstchild(char, "HumanoidRootPart")
-end
-
-local function safeGetPosition(part)
-    local pos = {getposition(part)}
-    if type(pos[1]) == "table" then
-        return pos[1].x or pos[1].X, pos[1].y or pos[1].Y, pos[1].z or pos[1].Z
-    else
-        return pos[1], pos[2], pos[3]
+    local function getRootPart(player)
+        local char = getcharacter(player)
+        if not char then return nil end
+        return findfirstchild(char, "HumanoidRootPart")
     end
-end
 
-local function fling(player)
+    local function safeGetPosition(part)
+        local pos = {getposition(part)}
+        if type(pos[1]) == "table" then
+            return pos[1].x or pos[1].X, pos[1].y or pos[1].Y, pos[1].z or pos[1].Z
+        else
+            return pos[1], pos[2], pos[3]
+        end
+    end
+
     if isFlinging then return false end
 
     local targetRoot = getRootPart(player)
@@ -48,5 +47,3 @@ local function fling(player)
 
     return true
 end
-
-return fling
