@@ -17,7 +17,7 @@ function PlayerID(playername)
     end
 	--let's try with display names :D
     for _, v in pairs(players) do
-        local name = Helper.getdisplayname(v):lower()
+        local name = bob.getdisplayname(v):lower()
         if name:find(PlayerName, 1, true) then
             return {v}
         end
