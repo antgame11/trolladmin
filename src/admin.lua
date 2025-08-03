@@ -2,6 +2,7 @@ local bob = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11
 local fling = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/fling.lua"))()
 local velocityfly = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/velocityfly.lua"))()
 local velocityspeed = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/velocityspeed.lua"))()
+local cframefly = loadstring(game:HttpGet("https://raw.githubusercontent.com/antgame11/trolladmin/refs/heads/main/src/modules/cframefly.lua"))()
 
 SET_MEMORY_READ_STRENGTH(0.00001)
 SET_MEMORY_WRITE_STRENGTH(0.00001)
@@ -67,6 +68,9 @@ local function callCommand(cmdName, ...)
 end
 
 local function getRootPart(player)
+	if player == nil then
+		player = getlocalplayer()
+	end
 	local character = getcharacter(player)
 	return findfirstchild(character, "HumanoidRootPart")
 end
@@ -180,6 +184,59 @@ addCommand({"infjump"}, function()
 	end
 	end)
 end,"makes you jump infinitely","")
+
+
+addCommand({"velocityspeed","vspeed","vws"}, function(entspeed)
+	local speed = tonumber(entspeed)
+	pcall(function ()
+		thread.terminate("velocityspeed")
+	end)
+	rwait(0.3)
+	thread.create("velocityspeed",function ()
+		velocityspeed(speed)
+	end)
+end,"gives you velocity based speed","")
+
+addCommand({"unvelocityspeed","unvspeed","unvws"}, function()
+	local speed = tonumber(entspeed)
+	pcall(function ()
+		thread.terminate("velocityspeed")
+	end)
+end,"removes your velocity speed","")
+
+addCommand({"vfly","fly"}, function(entspeed)
+	local speed = tonumber(entspeed)
+	pcall(function ()
+		thread.terminate("velocityfly")
+	end)
+	rwait(0.3)
+	thread.create("velocityfly",function ()
+		velocityspeed(speed)
+	end)
+end,"gives you velocity based fly","")
+
+addCommand({"unvfly","unfly"}, function()
+	pcall(function ()
+		thread.terminate("velocityfly")
+	end)
+end,"removes your velocity speed","")
+
+addCommand({"cfly","cframefly"}, function(entspeed)
+	local speed = tonumber(entspeed)
+	pcall(function ()
+		thread.terminate("cframefly")
+	end)
+	rwait(0.3)
+	thread.create("cframefly",function ()
+		cframefly(speed)
+	end)
+end,"gives you cframe based fly","")
+
+addCommand({"uncfly","unfly"}, function()
+	pcall(function ()
+		thread.terminate("cframefly")
+	end)
+end,"removes your cframe fly","")
 
 addCommand({"setfov", "fov"}, function(fovinput)
 	local fov = tonumber(fovinput)
