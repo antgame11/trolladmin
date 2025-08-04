@@ -92,7 +92,7 @@ end,"Brings yourself to another player","<plr>")
 
 addCommand({"loopto","loopgoto"}, function(plrname)
 	pcall(function ()
-		thread.clear("loopgoto")
+		thread.terminate("loopgoto")
 	end)
 	rwait(0.3)
 	thread.create("loopgoto",function ()
@@ -109,7 +109,7 @@ end,"loop goes to a player","<plr>")
 
 addCommand({"unloopto","unloopgoto"}, function()
 	pcall(function ()
-		thread.clear("loopgoto")
+		thread.terminate("loopgoto")
 	end)
 end,"loop goes to a player","<plr>")
 
@@ -159,7 +159,7 @@ end,"makes you sit","")
 
 addCommand({"infjump"}, function()
 	pcall(function ()
-		thread.clear("infjump")
+		thread.terminate("infjump")
 	end)
 	rwait(0.3)
 	thread.create("infjump",function ()
@@ -189,7 +189,7 @@ end,"makes you jump infinitely","")
 addCommand({"velocityspeed","vspeed","vws"}, function(entspeed)
 	local speed = tonumber(entspeed)
 	pcall(function ()
-		thread.clear("velocityspeed")
+		thread.terminate("velocityspeed")
 	end)
 	rwait(0.3)
 	thread.create("velocityspeed",function ()
@@ -200,14 +200,14 @@ end,"gives you velocity based speed","")
 addCommand({"unvelocityspeed","unvspeed","unvws"}, function()
 	local speed = tonumber(entspeed)
 	pcall(function ()
-		thread.clear("velocityspeed")
+		thread.terminate("velocityspeed")
 	end)
 end,"removes your velocity speed","")
 
 addCommand({"vfly","fly"}, function(entspeed)
 	local speed = tonumber(entspeed)
 	pcall(function ()
-		thread.clear("velocityfly")
+		thread.terminate("velocityfly")
 	end)
 	rwait(0.3)
 	thread.create("velocityfly",function ()
@@ -217,14 +217,14 @@ end,"gives you velocity based fly","")
 
 addCommand({"unvfly"}, function()
 	pcall(function ()
-		thread.clear("velocityfly")
+		thread.terminate("velocityfly")
 	end)
 end,"removes your velocity speed","")
 
 addCommand({"cfly","cframefly"}, function(entspeed)
 	local speed = tonumber(entspeed)
 	pcall(function ()
-		thread.clear("cframefly")
+		thread.terminate("cframefly")
 	end)
 	rwait(0.3)
 	thread.create("cframefly",function ()
@@ -234,16 +234,16 @@ end,"gives you cframe based fly","")
 
 addCommand({"uncfly"}, function()
 	pcall(function ()
-		thread.clear("cframefly")
+		thread.terminate("cframefly")
 	end)
 end,"removes your cframe fly","")
 
 addCommand({"unfly"}, function()
 	pcall(function ()
-		thread.clear("cframefly")
+		thread.terminate("cframefly")
 	end)
 	pcall(function ()
-		thread.clear("velocityfly")
+		thread.terminate("velocityfly")
 	end)
 end,"kills every fly","")
 
@@ -255,37 +255,8 @@ end,"sets your fov","")
 
 
 addCommand({"stopinfjump","noinfjump"}, function()
-	thread.clear("infjump")
+	thread.terminate("infjump")
 end,"makes you jump infinitely","")
-
-addCommand({"infjump"}, function()
-	pcall(function ()
-		thread.clear("infjump")
-	end)
-	rwait(0.3)
-	thread.create("infjump",function ()
-	while true do
-		local localplayer = getlocalplayer()
-		local character = getcharacter(localplayer)
-		local primarypart = findfirstchild(character, "HumanoidRootPart")
-
-		if character and primarypart then
-			local velocity = getvelocity(primarypart)
-			local keys = getpressedkeys()
-			
-			if table.find(keys, "Space") and not pressed and velocity ~= {velocity.x, 0, velocity.z} then
-				setvelocity(primarypart, {velocity.x, 50, velocity.z})
-				pressed = true
-			elseif not table.find(keys, "Space") then
-				pressed = false
-			end
-		end
-		
-		rwait(0.000001)
-	end
-	end)
-end,"makes you jump infinitely","")
-
 
 local ws = websocket_connect("ws://localhost:8765")
 
