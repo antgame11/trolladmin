@@ -18,7 +18,7 @@ return function (movespeed)
     local function multiplyVector(vector, scalar)
         return {x = vector.x * scalar, y = vector.y * scalar, z = vector.z * scalar}
     end
-    
+
     local function addVector(...)
         local args = {...}
         local newvector = {x = 0, y = 0, z = 0}
@@ -31,6 +31,7 @@ return function (movespeed)
     end
 
     while true do
+        wait(0.016)
         local player = getlocalplayer()
         local hrp = getRootPart(player)
 

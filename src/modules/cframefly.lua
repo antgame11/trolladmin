@@ -36,6 +36,7 @@ local currentPos = getposition(hrp)
 
 
 while true do
+    wait(0.016)
     local look = getlookvector(cam)
     local right = getrightvector(cam)
 
@@ -60,5 +61,4 @@ while true do
         setvelocity(hrp, {x = 0, y = 0, z = 0})
     setposition(hrp, currentPos)
 end
-
 end

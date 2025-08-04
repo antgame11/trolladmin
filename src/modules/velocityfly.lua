@@ -30,6 +30,7 @@ return function(movespeed)
     end
 
     while true do
+        wait(0.016)
         pcall(function (...)
              local player = getlocalplayer()
         local hrp = getRootPart(player)

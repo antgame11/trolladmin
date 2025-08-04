@@ -6,7 +6,7 @@ local cframefly = loadstring(game:HttpGet("https://raw.githubusercontent.com/ant
 
 SET_MEMORY_READ_STRENGTH(0.00001)
 SET_MEMORY_WRITE_STRENGTH(0.00001)
-
+command = nil
 local walkspeedran = false
 local commands = {}
 function PlayerID(playername)
@@ -261,10 +261,13 @@ end,"makes you jump infinitely","")
 local ws = websocket_connect("ws://localhost:8765")
 
 websocket_onmessage(ws, function(message)
-	local command = string.split(message," ")
-	print("Running ".. message)
-	pcall(function ()
-		callCommand(unpack(command))
-	end)
+	command = string.split(message," ")
 end)
 
+while true do
+	if (command ~= nil or command ~= "") and type(command) == "table" then
+		callCommand(unpack(command))
+		command = nil
+	end
+	wait(0.5)
+end
